@@ -1,0 +1,14 @@
+{
+    "name": "yurii/lesson2-oop",
+    "description": "lesson 2 - OOP",
+    "type": "project",
+    "license": "mit",
+    "authors": [
+        {
+            "name": "nabirator",
+            "email": "nabirator@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
