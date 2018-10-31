@@ -1,11 +1,11 @@
 {
-    "name": "yurii/lesson2-oop",
-    "description": "lesson 2 - OOP",
+    "name": "gymkhana/lesson2-oop",
+    "description": "Lesson 2 - OOP",
     "type": "project",
     "license": "mit",
     "authors": [
         {
-            "name": "nabirator",
+            "name": "Yurii Zhuravlov",
             "email": "nabirator@gmail.com"
         }
     ],
@@ -13,7 +13,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
+            "Gymkhana\\": "src/"
         }
     }
 }
