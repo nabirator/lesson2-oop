@@ -54,19 +54,38 @@ class Table
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return string
      * @throws \Exception
      */
     public function showTimePenaltyTable($data): string
     {
+        $data['rounds'] = random_int(1, 5);
         foreach ($data as $key => $value) {
             $time = random_int(0, time());
             $data[$key]['time'] = date('H:i', $time);
+            for ($x = 0; $x < $data['rounds']; $x++) {
+                $time = random_int(0, time());
+                $data[$key]['time' . $x] = date('H:i:s', $time);
+                $penalty_keys = ['рука', 'нога', 'лицо', 'конус'];
+                $penalty = array_rand($penalty_keys, 1);
+                $penalty_points = random_int(1, 10);
+                $penalty_time = $time + $penalty_points;
+                $result = date('H:i:s', $penalty_time);
+                $data[$key]['penalty' . $x] = $penalty_points . ' ' . $penalty_keys[$penalty];
+                if (!isset($data[$key]['result'])) {
+                    $data[$key]['result'] = $result;
+                }
+            }
         }
 
-        $markup = '<table><tr><th>#</th><th>Класс</th><th>Участник</th><th>Транспорт</th><th>Время</th><th>Штраф</th></tr>';
+        $markup = '<table><tr><th>#</th><th>Класс</th><th>Участник</th><th>Транспорт</th>';
+        for ($x = 0; $x < $data['rounds']; $x++) {
+            $markup .= "<th>Время $x</th><th>Штраф $x</th>";
+        }
+
+        $markup .= '</tr>';
         foreach ($data as $row) {
             $markup .= '<tr>';
             // ID
@@ -77,10 +96,12 @@ class Table
             $markup .= '<td>' . $row['name'] . '</td>';
             // TRANSPORT
             $markup .= '<td>' . $row['vehicle'] . '</td>';
-            // TIME
-            $markup .= '<td>' . $row['time'] . '</td>';
-            // PENALTY
-            $markup .= '<td>' . $row['penalty'] . '</td>';
+            for ($x = 0; $x < $data['rounds']; $x++) {
+                // TIME
+                $markup .= '<td>' . $row["time$x"] . '</td>';
+                // PENALTY
+                $markup .= '<td>' . $row["penalty$x"] . '</td>';
+            }
             $markup .= '</tr>';
         }
 
