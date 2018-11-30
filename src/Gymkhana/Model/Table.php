@@ -2,30 +2,47 @@
 
 namespace Gymkhana\Model;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class Table
 {
     public function showTable($data): string
     {
-        // Find longest string in each column
-        $columns = [];
-        foreach ($data as $row_key => $row) {
-            foreach ($row as $cell_key => $cell) {
-                $length = \strlen($cell);
-                if (empty($columns[$cell_key]) || $columns[$cell_key] < $length) {
-                    $columns[$cell_key] = $length;
-                }
-            }
+        $markup = '<table><tr><th>#</th><th>Класс</th><th>Участник</th><th>Транспорт</th></tr>';
+
+        foreach ($data as $row) {
+            $markup .= '<tr>';
+            // ID
+            $markup .= '<td>' . $row['id'] . '</td>';
+            // CLASS
+            $markup .= '<td>' . $row['class'] . '</td>';
+            // USER
+            $markup .= '<td>' . $row['name'] . '</td>';
+            // TRANSPORT
+            $markup .= '<td>' . $row['vehicle'] . '</td>';
+            $markup .= '</tr>';
         }
 
-        // Output table, padding columns
-        $table = '';
-        foreach ($data as $row_key => $row) {
-            foreach ($row as $cell_key => $cell) {
-                $table .= str_pad($cell, $columns[$cell_key]) . '   ';
-            }
-            $table .= PHP_EOL;
+        $markup .= '</table></body></html>';
+        return $markup;
+    }
+
+    public function showTableLinks(Request $request):string
+    {
+        $path = $request->getPathInfo();
+        $markup = '<ul>';
+        // Default link
+        $markup .= sprintf('<li><a %s>Default</a></li>', $path === '/' ? 'class="active"' : 'href="/"');
+        // Start link
+        $markup .= sprintf('<li><a %s>Start</a></li>', $path === '/start' ? 'class="active"' : 'href="/start"');
+        // Finish link
+        $markup .= sprintf('<li><a %s>Finish</a></li>', $path === '/finish' ? 'class="active"' : ' href="/finish"');
+        if ($path === '/finish') {
+            $markup .= '<li><a onclick="window.location.reload();">Reset</a></li>';
         }
-        return $table;
+        $markup .= '<li><a onclick="window.history.back();">Back</a></li>';
+        $markup .= '</ul>';
+        return $markup;
     }
 
     public function showGroupedByClassTable($data): string

@@ -9,12 +9,29 @@ use Gymkhana\Model\Database;
 
 class GymkhanaController
 {
+    public function default(Request $request): Response
+    {
+        $table = new Table();
+        $database = new Database();
+        $data = $database->loadData();
+        $markup = '<html><body>';
+        $markup .= '<link rel="stylesheet" type="text/css" href="css/style.css">';
+        $markup .= $table->showTableLinks($request);
+        $markup .= '<h2>Table with initial data</h2>';
+        $markup .= $table->showTable($data);
+        $markup .= '</html></body>';
+
+        return new Response($markup);
+    }
     public function start(Request $request): Response
     {
         $table = new Table();
         $database = new Database();
         $data = $database->loadData();
         $markup = '<html><body>';
+        $markup .= '<link rel="stylesheet" type="text/css" href="css/style.css">';
+        $markup .= $table->showTableLinks($request);
+        $markup .= '<h2>Table sorted by class</h2>';
         $markup .= $table->showGroupedByClassTable($data);
         $markup .= '</html></body>';
 
@@ -43,11 +60,10 @@ class GymkhanaController
 //            }
 //        }
         $markup = '<html><body>';
+        $markup .= '<link rel="stylesheet" type="text/css" href="css/style.css">';
+        $markup .= $table->showTableLinks($request);
         $markup .= '<h2>Table with time and penalty</h2>';
-        try {
-            $markup .= $table->showTimePenaltyTable($data);
-        } catch (Exception $e) {
-        }
+        $markup .= $table->showTimePenaltyTable($data);
         $markup .= '</html></body>';
 
         return new Response($markup);
