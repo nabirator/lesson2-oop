@@ -13,7 +13,8 @@
     "require": {
         "symfony/http-foundation": "^4.1",
         "symfony/routing": "^4.1",
-        "symfony/http-kernel": "^4.1"
+        "symfony/http-kernel": "^4.1",
+        "twig/twig": "^2.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",
