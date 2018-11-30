@@ -36,11 +36,9 @@ class Table
         // Start link
         $markup .= sprintf('<li><a %s>Start</a></li>', $path === '/start' ? 'class="active"' : 'href="/start"');
         // Finish link
-        $markup .= sprintf('<li><a %s>Finish</a></li>', $path === '/finish' ? 'class="active"' : ' href="/finish"');
-        if ($path === '/finish') {
-            $markup .= '<li><a onclick="window.location.reload();">Reset</a></li>';
-        }
-        $markup .= '<li><a onclick="window.history.back();">Back</a></li>';
+        $markup .= sprintf('<li><a %s>Finish</a></li>', $path === '/finish' ?
+            'class="active finish" onclick="window.location.reload();"' : ' href="/finish"');
+        $markup .= '<li><button onclick="window.history.back();">Back</button></li>';
         $markup .= '</ul>';
         return $markup;
     }

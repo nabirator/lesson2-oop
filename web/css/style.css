@@ -25,6 +25,6 @@ a:hover, a.active {
     box-shadow: 0 0 5px darkgoldenrod;
     background: lightgoldenrodyellow;
 }
-a.active:hover {
+a.active:not(.finish):hover {
     cursor: default;
 }

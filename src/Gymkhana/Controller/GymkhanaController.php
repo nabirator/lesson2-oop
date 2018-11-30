@@ -6,6 +6,7 @@ use Gymkhana\Model\Table;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Gymkhana\Model\Database;
+use Gymkhana\Service\Renderer;
 
 class GymkhanaController
 {
@@ -14,12 +15,11 @@ class GymkhanaController
         $table = new Table();
         $database = new Database();
         $data = $database->loadData();
-        $markup = '<html><body>';
-        $markup .= '<link rel="stylesheet" type="text/css" href="css/style.css">';
+        $markup = Renderer::headRender();
         $markup .= $table->showTableLinks($request);
         $markup .= '<h2>Table with initial data</h2>';
         $markup .= $table->showTable($data);
-        $markup .= '</html></body>';
+        $markup .= Renderer::footerRender();
 
         return new Response($markup);
     }
@@ -28,12 +28,11 @@ class GymkhanaController
         $table = new Table();
         $database = new Database();
         $data = $database->loadData();
-        $markup = '<html><body>';
-        $markup .= '<link rel="stylesheet" type="text/css" href="css/style.css">';
+        $markup = Renderer::headRender();
         $markup .= $table->showTableLinks($request);
         $markup .= '<h2>Table sorted by class</h2>';
         $markup .= $table->showGroupedByClassTable($data);
-        $markup .= '</html></body>';
+        $markup .= Renderer::footerRender();
 
         return new Response($markup);
     }
@@ -59,12 +58,11 @@ class GymkhanaController
 //                }
 //            }
 //        }
-        $markup = '<html><body>';
-        $markup .= '<link rel="stylesheet" type="text/css" href="css/style.css">';
+        $markup = Renderer::headRender();
         $markup .= $table->showTableLinks($request);
         $markup .= '<h2>Table with time and penalty</h2>';
         $markup .= $table->showTimePenaltyTable($data);
-        $markup .= '</html></body>';
+        $markup .= Renderer::footerRender();
 
         return new Response($markup);
     }
