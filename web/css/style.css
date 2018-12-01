@@ -1,5 +1,5 @@
 * {
-    color: darkred;
+    color: darkslategrey;
     background: whitesmoke;
 }
 
@@ -16,7 +16,7 @@ ul li {
 li a {
     padding: 5px 10px;
     border-radius: 10px;
-    border: 1px solid darkgray;
+    border: 1px solid darkslategrey;
     text-decoration: none;
     transition: 0.4s;
     cursor: pointer;
@@ -25,6 +25,10 @@ a:hover, a.active {
     box-shadow: 0 0 5px darkgoldenrod;
     background: lightgoldenrodyellow;
 }
-a.active:not(.finish):hover {
+a.active:hover {
     cursor: default;
+}
+
+button:hover {
+    cursor: pointer;
 }

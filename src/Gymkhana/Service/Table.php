@@ -1,6 +1,6 @@
 <?php
 
-namespace Gymkhana\Model;
+namespace Gymkhana\Service;
 
 use Symfony\Component\HttpFoundation\Request;
 
@@ -23,23 +23,7 @@ class Table
             $markup .= '</tr>';
         }
 
-        $markup .= '</table></body></html>';
-        return $markup;
-    }
-
-    public function showTableLinks(Request $request): string
-    {
-        $path = $request->getPathInfo();
-        $markup = '<ul>';
-        // Default link
-        $markup .= sprintf('<li><a %s>Default</a></li>', $path === '/' ? 'class="active"' : 'href="/"');
-        // Start link
-        $markup .= sprintf('<li><a %s>Start</a></li>', $path === '/start' ? 'class="active"' : 'href="/start"');
-        // Finish link
-        $markup .= sprintf('<li><a %s>Finish</a></li>', $path === '/finish' ?
-            'class="active finish" onclick="window.location.reload();"' : ' href="/finish"');
-        $markup .= '<li><button onclick="window.history.back();">Back</button></li>';
-        $markup .= '</ul>';
+        $markup .= '</table>';
         return $markup;
     }
 
@@ -64,7 +48,7 @@ class Table
             $markup .= '</tr>';
         }
 
-        $markup .= '</table></body></html>';
+        $markup .= '</table>';
         return $markup;
     }
 
@@ -116,7 +100,7 @@ class Table
             $markup .= '</tr>';
         }
 
-        $markup .= '</table></body></html>';
+        $markup .= '</table>';
         return $markup;
     }
 }
