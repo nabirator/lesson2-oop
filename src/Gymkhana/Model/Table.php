@@ -27,7 +27,7 @@ class Table
         return $markup;
     }
 
-    public function showTableLinks(Request $request):string
+    public function showTableLinks(Request $request): string
     {
         $path = $request->getPathInfo();
         $markup = '<ul>';
@@ -68,12 +68,6 @@ class Table
         return $markup;
     }
 
-    /**
-     * @param array $data
-     *
-     * @return string
-     * @throws \Exception
-     */
     public function showTimePenaltyTable($data): string
     {
         $data['rounds'] = random_int(1, 5);
