@@ -22,7 +22,11 @@ class GymkhanaController
 
     public function finish(Request $request): Response
     {
-        $markup = Renderer::basePage($request, 'with time and penalty', 'showTimePenaltyTable');
+        $markup = Renderer::basePage(
+            $request,
+            'with time and penalty grouped by class and sorted by result',
+            'showTimePenaltyTable'
+        );
         return new Response($markup);
     }
 }

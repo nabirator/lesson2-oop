@@ -2,8 +2,6 @@
 
 namespace Gymkhana\Service;
 
-use Symfony\Component\HttpFoundation\Request;
-
 class Table
 {
     public function showTable($data): string
@@ -89,8 +87,8 @@ class Table
                             $data[$key]['penalty'][$x] = '';
                         }
                         if (!isset($data[$key]['result'])
-                            || (\is_int($result && !\is_int($data[$key]['result']))
-                            || (\is_int($result) && $data[$key]['result'] > $result))) {
+                            || (\is_int($result)
+                            && (!\is_int($data[$key]['result']) || $data[$key]['result'] > $result))) {
                             $data[$key]['result'] = $result;
                         }
                 }
@@ -104,6 +102,25 @@ class Table
         }
         $markup .= '<th>Лучший заезд</th><th>Транспорт</th>';
         $markup .= '</tr>';
+
+        // Group by class and sort by best result.
+
+        usort($data, function ($a, $b) {
+            if ($a['class'] > $b['class']) {
+                return 1;
+            }
+
+            if ($a['class'] < $b['class']) {
+                return -1;
+            }
+
+            if ($a['class'] === $b['class']) {
+                if ($a['result'] === $b['result']) {
+                    return 0;
+                }
+                return ($a['result']>$b['result']) ? 1 : -1;
+            }
+        });
 
         foreach ($data as $row) {
             $markup .= '<tr>';
