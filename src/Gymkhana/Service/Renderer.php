@@ -29,6 +29,9 @@ class Renderer
         $markup .= self::showMenuLinks($request);
         $markup .= "<h2>Table $header</h2>";
         $markup .= $table->{$method}($data);
+        if ($method === 'showTimePenaltyTable') {
+            $markup .= $table->showWinnersByGroup($data);
+        }
         $markup .= self::footerRender();
         return $markup;
     }

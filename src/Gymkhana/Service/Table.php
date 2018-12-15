@@ -6,6 +6,8 @@ class Table
 {
     public function showTable($data): string
     {
+        // Creating markup.
+        /** @var array $data */
         $markup = '<table><tr><th>#</th><th>Класс</th><th>Участник</th><th>Транспорт</th></tr>';
         foreach ($data as $row) {
             $markup .= '<tr>';
@@ -26,9 +28,13 @@ class Table
 
     public function showGroupedByClassTable($data): string
     {
+        // Prepare data.
+        /** @var array $data */
         usort($data, function ($a, $b) {
             return $a['class'] <=> $b['class'];
         });
+
+        // Creating markup.
         $markup = '<table><tr><th>#</th><th>Класс</th><th>Участник</th><th>Транспорт</th></tr>';
 
         foreach ($data as $row) {
@@ -48,8 +54,10 @@ class Table
         return $markup;
     }
 
-    public function showTimePenaltyTable($data): string
+    public function showTimePenaltyTable(&$data): string
     {
+        // Prepare data.
+        /** @var array $data */
         date_default_timezone_set('UTC');
         $rounds = random_int(1, 5);
         foreach ($data as $key => $value) {
@@ -95,6 +103,8 @@ class Table
             }
         }
 
+        // @TODO Duplication of code, refactoring required.
+        // Creating markup.
         $markup = '<table><tr><th>#</th><th>Класс</th><th>Участник</th>';
         $rounds = \count($data[0]['time']);
         for ($x = 1; $x <= $rounds; $x++) {
@@ -120,6 +130,8 @@ class Table
                 }
                 return ($a['result']>$b['result']) ? 1 : -1;
             }
+
+            return 0;
         });
 
         foreach ($data as $row) {
@@ -145,6 +157,69 @@ class Table
         }
 
         $markup .= '</table>';
+        return $markup;
+    }
+
+    public static function showWinnersByClass($class, $data):string
+    {
+        // @TODO Duplication of code, refactoring required.
+        // Creating markup.
+        /** @var array $data */
+        $markup = '<table><tr><th>#</th><th>Класс</th><th>Участник</th>';
+        $rounds = \count($data[0]['time']);
+        for ($x = 1; $x <= $rounds; $x++) {
+            $markup .= '<th colspan="2">Заезд ' . $x . '</th>';
+        }
+        $markup .= '<th>Лучший заезд</th><th>Транспорт</th>';
+        $markup .= '</tr>';
+
+        // Group by class and sort by best result.
+
+        usort($data, function ($a, $b) {
+            if ($a['result'] === $b['result']) {
+                return 0;
+            }
+            return ($a['result']>$b['result']) ? 1 : -1;
+        });
+
+        $place = 1;
+        foreach ($data as $row) {
+            if ($place <= 3
+                && $row['class'] === $class) {
+                $markup .= '<tr>';
+                // ID
+                $markup .= '<td>' . $row['id'] . '</td>';
+                // CLASS
+                $markup .= '<td>' . $row['class'] . '</td>';
+                // USER
+                $markup .= '<td>' . $row['name'] . '</td>';
+                for ($x = 1; $x <= $rounds; $x++) {
+                    // TIME
+                    $markup .= '<td>' . (\is_int($row['time'][$x]) ?
+                            date('H:i:s', $row['time'][$x]) :
+                            $row['time'][$x]) . '</td>';
+                    // PENALTY
+                    $markup .= '<td>' . $row['penalty'][$x] . '</td>';
+                }
+                $markup .= '<td>' . (\is_int($row['result']) ?
+                        date('H:i:s', $row['result']) :
+                        $row['result']) . '</td><td>' . $row['vehicle'] . '</td>';
+                $markup .= '</tr>';
+                $place++;
+            }
+        }
+
+        $markup .= '</table>';
+        return $markup;
+    }
+
+    public function showWinnersByGroup($data):string
+    {
+        $markup = '';
+        foreach (array_unique(array_column($data, 'class')) as $class) {
+            $markup .= "<h2>Table winners by class \"$class\"</h2>";
+            $markup .= self::showWinnersByClass($class, $data);
+        }
         return $markup;
     }
 }
