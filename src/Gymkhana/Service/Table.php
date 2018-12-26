@@ -8,7 +8,9 @@ class Table
     {
         // Creating markup.
         /** @var array $data */
-        $markup = '<table><tr><th>#</th><th>Класс</th><th>Участник</th><th>Транспорт</th></tr>';
+        $markup = '<table class="table table-bordered"><thead class="thead-dark">
+            <tr><th>#</th><th>Класс</th><th>Участник</th><th>Транспорт</th></tr>
+            </thead><tbody>';
         foreach ($data as $row) {
             $markup .= '<tr>';
             // ID
@@ -22,7 +24,7 @@ class Table
             $markup .= '</tr>';
         }
 
-        $markup .= '</table>';
+        $markup .= '</tbody></table>';
         return $markup;
     }
 
@@ -35,7 +37,7 @@ class Table
         });
 
         // Creating markup.
-        $markup = '<table><tr><th>#</th><th>Класс</th><th>Участник</th><th>Транспорт</th></tr>';
+        $markup = '<table class="table"><tr><th>#</th><th>Класс</th><th>Участник</th><th>Транспорт</th></tr>';
 
         foreach ($data as $row) {
             $markup .= '<tr>';
@@ -105,7 +107,7 @@ class Table
 
         // @TODO Duplication of code, refactoring required.
         // Creating markup.
-        $markup = '<table><tr><th>#</th><th>Класс</th><th>Участник</th>';
+        $markup = '<table class="table"><tr><th>#</th><th>Класс</th><th>Участник</th>';
         $rounds = \count($data[0]['time']);
         for ($x = 1; $x <= $rounds; $x++) {
             $markup .= '<th colspan="2">Заезд ' . $x . '</th>';
@@ -165,7 +167,7 @@ class Table
         // @TODO Duplication of code, refactoring required.
         // Creating markup.
         /** @var array $data */
-        $markup = '<table><tr><th>#</th><th>Класс</th><th>Участник</th>';
+        $markup = '<table class="table"><tr><th>#</th><th>Класс</th><th>Участник</th>';
         $rounds = \count($data[0]['time']);
         for ($x = 1; $x <= $rounds; $x++) {
             $markup .= '<th colspan="2">Заезд ' . $x . '</th>';

@@ -11,12 +11,14 @@ class Renderer
 {
     public static function basePage(Request $request, $header, $method): string
     {
+        // Initialize Twig
         $loader = new Twig_Loader_Filesystem('../templates');
         $twig = new Twig_Environment($loader, array(
             'cache' => '../twig_cache',
             'auto_reload' => true
         ));
 
+        // Initialize variables
         $links = [
             'Default' => '/',
             'Start' => '/start',
