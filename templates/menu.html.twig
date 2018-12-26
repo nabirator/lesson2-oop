@@ -1,0 +1,11 @@
+<ul class="menu">
+    {% for name,path in links %}
+        <li><a {% if path == current_path %} class="active" {% else %} href="{{ path }}" {% endif %}>{{ name }}</a></li>
+    {% endfor %}
+    <li>
+        <button onclick="window.location.reload();">Refresh</button>
+    </li>
+    <li>
+        <button onclick="window.history.back();">Back</button>
+    </li>
+</ul>
