@@ -8,7 +8,9 @@ class Table
     {
         // Creating markup.
         /** @var array $data */
-        $markup = '<table><tr><th>#</th><th>Класс</th><th>Участник</th><th>Транспорт</th></tr>';
+        $markup = '<table class="table table-sm table-bordered text-center"><thead class="thead-dark text-nowrap">
+            <tr><th>#</th><th>Класс</th><th>Участник</th><th>Транспорт</th></tr>
+            </thead><tbody>';
         foreach ($data as $row) {
             $markup .= '<tr>';
             // ID
@@ -22,7 +24,7 @@ class Table
             $markup .= '</tr>';
         }
 
-        $markup .= '</table>';
+        $markup .= '</tbody></table>';
         return $markup;
     }
 
@@ -35,7 +37,8 @@ class Table
         });
 
         // Creating markup.
-        $markup = '<table><tr><th>#</th><th>Класс</th><th>Участник</th><th>Транспорт</th></tr>';
+        $markup = '<table class="table table-sm table-bordered text-center"><thead class="thead-dark text-nowrap">
+            <tr><th>#</th><th>Класс</th><th>Участник</th><th>Транспорт</th></tr></thead><tbody>';
 
         foreach ($data as $row) {
             $markup .= '<tr>';
@@ -50,7 +53,7 @@ class Table
             $markup .= '</tr>';
         }
 
-        $markup .= '</table>';
+        $markup .= '</tbody></table>';
         return $markup;
     }
 
@@ -58,6 +61,7 @@ class Table
     {
         // Prepare data.
         /** @var array $data */
+        $default_max_time = 7200; // 2 hours.
         date_default_timezone_set('UTC');
         $rounds = random_int(1, 5);
         foreach ($data as $key => $value) {
@@ -69,15 +73,17 @@ class Table
                         $data[$key]['time'][$x] = '';
                         $data[$key]['penalty'][$x] = '';
                         if (!isset($data[$key]['result'])) {
-                            $data[$key]['result'] = '';
+                            $data[$key]['result'] = $default_max_time;
+                            $data[$key]['result_title'] = '';
                         }
                         break;
-                    case ($random_result >= 90):
+                    case ($random_result < 15):
                         // 10% possibility to not count result.
                         $data[$key]['time'][$x] = 'Не засчитано';
                         $data[$key]['penalty'][$x] = '';
                         if (!isset($data[$key]['result'])) {
-                            $data[$key]['result'] = 'Не засчитано';
+                            $data[$key]['result'] = $default_max_time;
+                            $data[$key]['result_title'] = 'Не засчитано';
                         }
                         break;
                     default:
@@ -105,13 +111,14 @@ class Table
 
         // @TODO Duplication of code, refactoring required.
         // Creating markup.
-        $markup = '<table><tr><th>#</th><th>Класс</th><th>Участник</th>';
+        $markup = '<table class="table table-sm table-bordered text-center"><thead class="thead-dark text-nowrap">
+            <tr><th>#</th><th>Класс</th><th>Участник</th>';
         $rounds = \count($data[0]['time']);
         for ($x = 1; $x <= $rounds; $x++) {
             $markup .= '<th colspan="2">Заезд ' . $x . '</th>';
         }
         $markup .= '<th>Лучший заезд</th><th>Транспорт</th>';
-        $markup .= '</tr>';
+        $markup .= '</tr></thead><tbody>';
 
         // Group by class and sort by best result.
 
@@ -150,13 +157,13 @@ class Table
                 // PENALTY
                 $markup .= '<td>' . $row['penalty'][$x] . '</td>';
             }
-            $markup .= '<td>' . (\is_int($row['result']) ?
+            $markup .= '<td>' . ($row['result'] !== $default_max_time ?
                 date('H:i:s', $row['result']) :
-                $row['result']) . '</td><td>' . $row['vehicle'] . '</td>';
+                $row['result_title']) . '</td><td>' . $row['vehicle'] . '</td>';
             $markup .= '</tr>';
         }
 
-        $markup .= '</table>';
+        $markup .= '</tbody></table>';
         return $markup;
     }
 
@@ -165,13 +172,14 @@ class Table
         // @TODO Duplication of code, refactoring required.
         // Creating markup.
         /** @var array $data */
-        $markup = '<table><tr><th>#</th><th>Класс</th><th>Участник</th>';
+        $markup = '<table class="table table-sm table-bordered text-center"><thead class="thead-dark text-nowrap">
+            <tr><th>#</th><th>Класс</th><th>Участник</th>';
         $rounds = \count($data[0]['time']);
         for ($x = 1; $x <= $rounds; $x++) {
             $markup .= '<th colspan="2">Заезд ' . $x . '</th>';
         }
         $markup .= '<th>Лучший заезд</th><th>Транспорт</th>';
-        $markup .= '</tr>';
+        $markup .= '</tr></thead><tbody>';
 
         // Group by class and sort by best result.
 
@@ -209,7 +217,7 @@ class Table
             }
         }
 
-        $markup .= '</table>';
+        $markup .= '</tbody></table>';
         return $markup;
     }
 
@@ -217,7 +225,9 @@ class Table
     {
         $markup = '';
         foreach (array_unique(array_column($data, 'class')) as $class) {
-            $markup .= "<h2>Table winners by class \"$class\"</h2>";
+            $markup .= '<div class="row justify-content-md-center no-gutters border border-bottom-0">'
+                . "<h2>Table winners by class $class</h2>"
+                . '</div>';
             $markup .= self::showWinnersByClass($class, $data);
         }
         return $markup;

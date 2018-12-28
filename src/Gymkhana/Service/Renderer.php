@@ -4,59 +4,43 @@ namespace Gymkhana\Service;
 
 use Symfony\Component\HttpFoundation\Request;
 use Gymkhana\Model\Database;
+use Twig_Environment;
+use Twig_Loader_Filesystem;
 
 class Renderer
 {
-    public static function headRender(): string
-    {
-        $markup = '<html><head>';
-        $markup .= '<link rel="stylesheet" type="text/css" href="css/style.css">';
-        $markup .= '</head><body>';
-        return $markup;
-    }
-
-    public static function footerRender(): string
-    {
-        return '</body></html>';
-    }
-
     public static function basePage(Request $request, $header, $method): string
     {
+        // Initialize Twig
+        $loader = new Twig_Loader_Filesystem('../templates');
+        $twig = new Twig_Environment($loader, array(
+            'cache' => '../twig_cache',
+            'auto_reload' => true
+        ));
+
+        // Initialize variables
+        $links = [
+            'Default' => '/',
+            'Start' => '/start',
+            'Finish' => '/finish'
+        ];
+        $path = $request->getPathInfo();
+
         $table = new Table();
         $database = new Database();
         $data = $database->loadData();
-        $markup = self::headRender();
-        $markup .= self::showMenuLinks($request);
-        $markup .= "<h2>Table $header</h2>";
+        $markup = $twig->render('header.html.twig');
+        $markup .= $twig->render('menu.html.twig', [
+            'links' => $links,
+            'current_path' => $path
+        ]);
+        $markup .= '<div class="row justify-content-md-center no-gutters border border-bottom-0">'
+            . "<h2>Table $header</h2></div>";
         $markup .= $table->{$method}($data);
         if ($method === 'showTimePenaltyTable') {
             $markup .= $table->showWinnersByGroup($data);
         }
-        $markup .= self::footerRender();
-        return $markup;
-    }
-
-    public static function createMenuItem($currentPath, $itemPath = '/', $title = 'title'): string
-    {
-        $format = '<li><a %s>' . $title . '</a></li>';
-        $arguments = $currentPath === $itemPath ? 'class="active"' : 'href="' . $itemPath .'"';
-        return sprintf($format, $arguments);
-    }
-
-    public static function showMenuLinks(Request $request): string
-    {
-        $path = $request->getPathInfo();
-        $markup = '<ul class="menu">';
-        // Default link
-        $markup .= self::createMenuItem($path, '/', 'Default');
-        // Start link
-        $markup .= self::createMenuItem($path, '/start', 'Start');
-        // Finish link
-        $markup .= self::createMenuItem($path, '/finish', 'Finish');
-
-        $markup .= '<li><button onclick="window.location.reload();">Refresh</button></li>';
-        $markup .= '<li><button onclick="window.history.back();">Back</button></li>';
-        $markup .= '</ul>';
+        $markup .= $twig->render('footer.html.twig');
         return $markup;
     }
 }
