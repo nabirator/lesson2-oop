@@ -34,7 +34,8 @@ class Renderer
             'links' => $links,
             'current_path' => $path
         ]);
-        $markup .= "<h2>Table $header</h2>";
+        $markup .= '<div class="row justify-content-md-center no-gutters border border-bottom-0">'
+            . "<h2>Table $header</h2></div>";
         $markup .= $table->{$method}($data);
         if ($method === 'showTimePenaltyTable') {
             $markup .= $table->showWinnersByGroup($data);
