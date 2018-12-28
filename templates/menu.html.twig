@@ -1,0 +1,16 @@
+<div class="row justify-content-md-center p-3">
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        {% for name,path in links %}
+            <a
+                    {% if path == current_path %}
+                class="btn btn-primary active disabled"
+            {% else %}
+                href="{{ path }}" class="btn btn-secondary"
+                    {% endif %}>
+                {{ name }}
+            </a>
+        {% endfor %}
+    </div>
+    <button class="btn btn-outline-success mx-2" onclick="window.location.reload();">Refresh</button>
+    <button class="btn btn-outline-warning" onclick="window.history.back();">Back</button>
+</div>
