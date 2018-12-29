@@ -8,18 +8,47 @@ use Gymkhana\Service\Renderer;
 
 class GymkhanaController
 {
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function default(Request $request): Response
     {
-        $markup = Renderer::basePage($request, 'with initial data', 'showTable');
+        $markup = Renderer::basePage(
+            $request,
+            'with initial data',
+            'showTable'
+        );
         return new Response($markup);
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function start(Request $request): Response
     {
-        $markup = Renderer::basePage($request, 'sorted by class', 'showGroupedByClassTable');
+        $markup = Renderer::basePage(
+            $request,
+            'sorted by class',
+            'showGroupedByClassTable'
+        );
         return new Response($markup);
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public function finish(Request $request): Response
     {
         $markup = Renderer::basePage(
