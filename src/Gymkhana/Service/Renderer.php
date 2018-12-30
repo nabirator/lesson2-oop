@@ -33,10 +33,11 @@ class Renderer
             'Start' => '/start',
             'Finish' => '/finish'
         ];
+        $path = $request->getPathInfo();
         $options = [];
         // 2 hours, magic number.
         $options['max_time'] = 7200;
-        $path = $request->getPathInfo();
+        $options['title'] = $header;
 
         $table = new Table();
         $database = new Database();
@@ -46,8 +47,6 @@ class Renderer
             'links' => $links,
             'current_path' => $path
         ]);
-        $markup .= '<div class="row justify-content-md-center no-gutters border border-bottom-0">'
-            . "<h2>Table $header</h2></div>";
         $markup .= $table->{$method}($data, $twig, $options);
         if ($method === 'showTimePenaltyTable') {
             $markup .= $table->showWinnersByGroup($data, $twig, $options);

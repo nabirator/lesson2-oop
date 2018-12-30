@@ -7,32 +7,40 @@ class Table
     /**
      * @param array $data
      * @param \Twig_Environment $twig
+     * @param array $options
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function showTable(array $data, \Twig_Environment $twig): string
+    public function showTable(array $data, \Twig_Environment $twig, array $options): string
     {
-        return $twig->render('table.html.twig', ['data' => $data]);
+        return $twig->render('table.html.twig', [
+            'data' => $data,
+            'title'=> $options['title']
+        ]);
     }
 
     /**
      * @param array $data
      * @param \Twig_Environment $twig
+     * @param array $options
      * @return string
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function showGroupedByClassTable(array $data, \Twig_Environment $twig): string
+    public function showGroupedByClassTable(array $data, \Twig_Environment $twig, array $options): string
     {
         // Sort data by class.
         usort($data, function ($a, $b) {
             return $a['class'] <=> $b['class'];
         });
 
-        return $twig->render('table.html.twig', ['data' => $data]);
+        return $twig->render('table.html.twig', [
+            'data' => $data,
+            'title'=> $options['title']
+        ]);
     }
 
     /**
@@ -116,7 +124,8 @@ class Table
         return $twig->render('table.html.twig', [
             'data' => $data,
             'rounds' => $rounds,
-            'max_time' => $options['max_time']
+            'max_time' => $options['max_time'],
+            'title' => $options['title']
         ]);
     }
 
@@ -134,9 +143,7 @@ class Table
         $markup = '';
         foreach (array_unique(array_column($data, 'class')) as $class) {
             $options['class'] = $class;
-            $markup .= '<div class="row justify-content-md-center no-gutters border border-bottom-0">'
-                . "<h2>Table winners by class $class</h2>"
-                . '</div>';
+            $options['title'] = 'Table winners by class ' . $class;
             $markup .= self::showWinnersByClass($data, $twig, $options);
         }
         return $markup;
@@ -174,7 +181,8 @@ class Table
         return $twig->render('table.html.twig', [
             'data' => $winners_data,
             'rounds' => $rounds,
-            'max_time' => $options['max_time']
+            'max_time' => $options['max_time'],
+            'title' => $options['title']
         ]);
     }
 }

@@ -19,7 +19,7 @@ class GymkhanaController
     {
         $markup = Renderer::basePage(
             $request,
-            'with initial data',
+            'Table with initial data',
             'showTable'
         );
         return new Response($markup);
@@ -36,7 +36,7 @@ class GymkhanaController
     {
         $markup = Renderer::basePage(
             $request,
-            'sorted by class',
+            'Table sorted by class',
             'showGroupedByClassTable'
         );
         return new Response($markup);
@@ -53,7 +53,7 @@ class GymkhanaController
     {
         $markup = Renderer::basePage(
             $request,
-            'with time and penalty grouped by class and sorted by result',
+            'Table with time and penalty grouped by class and sorted by result',
             'showTimePenaltyTable'
         );
         return new Response($markup);
