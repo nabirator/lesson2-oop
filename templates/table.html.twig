@@ -1,0 +1,42 @@
+<div class="row justify-content-md-center no-gutters border border-bottom-0">
+    <h2>{{ title }}</h2>
+</div>
+<table class="table table-sm table-bordered text-center">
+    <thead class="thead-dark text-nowrap">
+        <tr>
+            <th>#</th>
+            <th>Класс</th>
+            <th>Участник</th>
+            {% if rounds %}
+                {% for round in 1..rounds %}
+                    <th colspan="2">Заезд {{ round }}</th>
+                {% endfor %}
+                <th>Лучший заезд</th>
+            {% endif %}
+            <th>Транспорт</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for item in data %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.class }}</td>
+            <td>{{ item.name }}</td>
+            {% if rounds %}
+                {% for round in 1..rounds %}
+                    <td>
+                        {{ item.time[round] matches '/^\\d+$/' ? item.time[round]|date('H:i:s') : item.time[round] }}
+                    </td>
+                    <td>
+                        {{ item.penalty[round] }}
+                    </td>
+                {% endfor %}
+                <td>
+                    {{ item.result != max_time ? item.result|date('H:i:s') : item.result_title }}
+                </td>
+            {% endif %}
+            <td>{{ item.vehicle }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
