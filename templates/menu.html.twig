@@ -2,11 +2,11 @@
     <div class="btn-group btn-group-toggle" data-toggle="buttons">
         {% for name,path in links %}
             <a
-                    {% if path == current_path %}
-                class="btn btn-primary active disabled"
-            {% else %}
-                href="{{ path }}" class="btn btn-secondary"
-                    {% endif %}>
+                {% if path == current_path %}
+                    class="btn btn-primary active disabled"
+                {% else %}
+                    href="{{ path }}" class="btn btn-secondary"
+                {% endif %}>
                 {{ name }}
             </a>
         {% endfor %}

@@ -9,6 +9,15 @@ use Twig_Loader_Filesystem;
 
 class Renderer
 {
+    /**
+     * @param Request $request
+     * @param $header
+     * @param $method
+     * @return string
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
     public static function basePage(Request $request, $header, $method): string
     {
         // Initialize Twig
@@ -25,6 +34,10 @@ class Renderer
             'Finish' => '/finish'
         ];
         $path = $request->getPathInfo();
+        $options = [];
+        // 2 hours, magic number.
+        $options['max_time'] = 7200;
+        $options['title'] = $header;
 
         $table = new Table();
         $database = new Database();
@@ -34,11 +47,9 @@ class Renderer
             'links' => $links,
             'current_path' => $path
         ]);
-        $markup .= '<div class="row justify-content-md-center no-gutters border border-bottom-0">'
-            . "<h2>Table $header</h2></div>";
-        $markup .= $table->{$method}($data);
+        $markup .= $table->{$method}($data, $twig, $options);
         if ($method === 'showTimePenaltyTable') {
-            $markup .= $table->showWinnersByGroup($data);
+            $markup .= $table->showWinnersByGroup($data, $twig, $options);
         }
         $markup .= $twig->render('footer.html.twig');
         return $markup;
