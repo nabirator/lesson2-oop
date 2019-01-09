@@ -6,8 +6,27 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Gymkhana\Service\Renderer;
 
+/**
+ * Class GymkhanaController
+ * @package Gymkhana\Controller
+ */
 class GymkhanaController
 {
+    /**
+     * @var Renderer
+     */
+    private $render;
+
+    /**
+     * GymkhanaController constructor.
+     */
+    public function __construct()
+    {
+        if (!$this->render) {
+            $this->render = new Renderer();
+        }
+    }
+
     /**
      * @param Request $request
      * @return Response
@@ -17,7 +36,7 @@ class GymkhanaController
      */
     public function default(Request $request): Response
     {
-        $markup = Renderer::basePage(
+        $markup = $this->render->basePage(
             $request,
             'Table with initial data',
             'showTable'
@@ -34,7 +53,7 @@ class GymkhanaController
      */
     public function start(Request $request): Response
     {
-        $markup = Renderer::basePage(
+        $markup = $this->render->basePage(
             $request,
             'Table sorted by class',
             'showGroupedByClassTable'
@@ -51,7 +70,7 @@ class GymkhanaController
      */
     public function finish(Request $request): Response
     {
-        $markup = Renderer::basePage(
+        $markup = $this->render->basePage(
             $request,
             'Table with time and penalty grouped by class and sorted by result',
             'showTimePenaltyTable'
