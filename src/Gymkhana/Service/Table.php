@@ -144,7 +144,7 @@ class Table
         foreach (array_unique(array_column($data, 'class')) as $class) {
             $options['class'] = $class;
             $options['title'] = 'Table winners by class ' . $class;
-            $markup .= self::showWinnersByClass($data, $twig, $options);
+            $markup .= $this->showWinnersByClass($data, $twig, $options);
         }
         return $markup;
     }
@@ -158,7 +158,7 @@ class Table
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function showWinnersByClass(array $data, \Twig_Environment $twig, array $options): string
+    public function showWinnersByClass(array $data, \Twig_Environment $twig, array $options): string
     {
         // Group by class and sort by best result.
         usort($data, function ($a, $b) {

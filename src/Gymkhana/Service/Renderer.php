@@ -7,8 +7,17 @@ use Gymkhana\Model\Database;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
 
+/**
+ * Class Renderer
+ * @package Gymkhana\Service
+ */
 class Renderer
 {
+    /**
+     * 2 hours.
+     */
+    private const MAX_TIME = 7200;
+
     /**
      * @param Request $request
      * @param $header
@@ -18,7 +27,7 @@ class Renderer
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public static function basePage(Request $request, $header, $method): string
+    public function basePage(Request $request, $header, $method): string
     {
         // Initialize Twig
         $loader = new Twig_Loader_Filesystem('../templates');
@@ -35,8 +44,7 @@ class Renderer
         ];
         $path = $request->getPathInfo();
         $options = [];
-        // 2 hours, magic number.
-        $options['max_time'] = 7200;
+        $options['max_time'] = self::MAX_TIME;
         $options['title'] = $header;
 
         $table = new Table();
